@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<spiderRule>
+    <!--规则分来源名.xml（存放到小说爬虫目录下的rules文件夹中）与来源名_content.xml两份，来源名_content.xml中存储从章节URL中获取章节内容的规则，此份规则存放到/content_rules文件夹中，不可存放到子文件夹中-->
+    <source>biquge</source><!--来源名，唯一规则标识，小说信息列表规则命名可不根据source，但是内容规则命名必须是source_content.xml-->
+    <siteName>笔趣阁</siteName><!--目标站名-->
+    <siteDomain>www.qu.la|||qu.la</siteDomain><!--目标站域名，用|||分割-->
+    <encoding>gbk</encoding><!--目标站编码，留空自动识别-->
+    <infoUrl>http://www.qu.la/book/{novelId}/</infoUrl><!--小说信息页URL，用于按ID采集，{novelId}代表ID，{novelId/1000}代表ID除以1000并取整，目前只能除以1000-->
+    <infoRule>
+        <bookTitle>
+            <type>xpath</type><!--所有规则type都有 1.正则：regex 2.XPath：xpath 3.css选择器：css-->
+            <rule>//h1</rule><!--规则内容-->
+        </bookTitle>
+        <bookCover>
+            <type>xpath</type>
+            <rule>//div[contains(@id,'fmimg')]//img/@src</rule>
+            <default>nocover</default><!--默认封面，若封面地址中存在该字符串则为默认封面-->
+            <extension></extension><!--图片后缀名，不填则自动识别，若图片后有加?xxx之类的，则必须在这里填写后缀名，例如jpg png-->
+        </bookCover>
+        <bookAuthor>
+            <type>regex</type>
+            <rule>@&lt;p&gt;作&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;者：(.+?)&lt;/p&gt;@</rule>
+        </bookAuthor>
+        <bookStatus>
+            <type>regex</type>
+            <rule>@&lt;meta property="og:novel:status" content="(.+?)"/&gt;@</rule>
+            <endWord>完结</endWord><!--若取出的状态文字等于endWord中填写的文字，则识别为已完成-->
+        </bookStatus>
+        <bookSort>
+            <type>regex</type>
+            <rule>@&lt;meta property="og:novel:category" content="(.*)"/&gt;@</rule>
+            <sortList>玄幻小说-->玄幻魔法|||修真小说-->武侠修真|||都市小说-->都市言情|||历史小说-->历史军事|||网游小说-->网游动漫|||科幻小说-->科幻小说</sortList><!--sortList用|||分割，箭头左边代表目标站的分类名，右边代表入库时对应的分类名，不在该列表中的分类自动识别为其他类别，入库时若分类不存在则自动新建-->
+        </bookSort>
+        <bookIntro>
+            <type>xpath</type>
+            <rule>//div[contains(@id,'intro')]//p[1]</rule>
+            <replace>@&amp;#13;@--></replace><!--替换规则，使用正则，替换小说简介中的内容，格式与sortList相同，箭头左边填写正则（同rule一样要带分隔符例如//,##,@@），右边填写要替换成的内容-->
+        </bookIntro>
+        <listUrl>
+            <sameAsInfo>true</sameAsInfo><!--是否与小说信息页URL相同，若为true则下面的规则无效，若为其他值则根据下面的规则取出URL-->
+            <type>xpath</type>
+            <rule></rule>
+        </listUrl>
+    </infoRule>
+    <listRule>
+        <reverse>false</reverse><!--是否反转章节顺序（倒序，若原网站章节为倒序排列则填写true）-->
+        <delChapter></delChapter><!--需要删除的章节（数值），用|||分割，若章节不存在则忽略。若要反转章节则先反转再根据反转后的章节顺序进行删除。如果章节为正数，则移出第x章。如果为负数，则移出倒数第x章。1 = 第一章，-1 = 最后一章。-->
+        <chapterTitle>
+            <type>regex</type>
+            <rule>@&lt;dd&gt;&lt;a href="\d+\.html"&gt;(.+?)&lt;/a&gt;&lt;/dd&gt;@</rule>
+        </chapterTitle>
+        <chapterUrl>
+            <type>regex</type>
+            <rule>@&lt;dd&gt;&lt;a href="(\d+\.html)"&gt;@</rule>
+        </chapterUrl>
+    </listRule>
+</spiderRule>

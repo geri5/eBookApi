@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<spiderRule>
+    <encoding>gbk</encoding><!--目标站编码，留空自动识别-->
+    <chapterContent>
+        <type>regex</type>
+        <rule>@&lt;div id="content"&gt;&lt;script&gt;readx\(\);&lt;/script&gt;(.+?)&lt;/div&gt;@i</rule>
+        <replace></replace><!--替换规则，使用正则，替换章节内容中的内容，用|||分割，箭头左边填写正则（同rule一样要带分隔符例如//,##,@@），右边填写要替换成的内容-->
+    </chapterContent>
+</spiderRule>
