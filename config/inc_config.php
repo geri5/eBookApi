@@ -13,6 +13,7 @@ $GLOBALS['apiConfig'] = array(
     ),
     // 使用迅搜XunSearch作为搜索引擎的话，需要修改config/xs_novel.ini中的端口（8383和8384修改成自己的迅搜的端口，默认是8383和8384）
     // 切换搜索引擎时需要修改config/routers.php，将需要的搜索引擎的add路由代码取消注释，将不需要的注释起来
+    // 可以使用nohup & 来执行utils/xunsearch/rebuild_index.sh以每隔10分钟重建索引，或者使用crontab执行php utils/xunsearch/rebuild_index.php
     'searchByXS' => array(
         'ini' => 'xs_novel.ini', // ini文件名，存放在config目录下
     ),
@@ -30,6 +31,6 @@ $GLOBALS['config']['redis'] = array(
     'host' => '127.0.0.1',
     'port' => 6379,
     'pass' => '',
-    'prefix' => 'enovel',
+    'prefix' => 'eBook',
     'timeout' => 30,
 );
